@@ -39,8 +39,5 @@ docker-compose down --remove-orphans
 # Deleting sql script
  rm test_sql_script.sql test_ro_sql_script.sql
 
-# Deactivating venv
-deactivate
-
 # Deleting venv folder
 rm -rf tutorial_env
