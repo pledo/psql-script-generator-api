@@ -12,7 +12,7 @@ $ cd psql-script-generator-api
 
 2- Build and run the docker compose
 ```bash
-$ docker-compose -d up --build
+$ docker-compose up -d --build
 ```
 
 3- Call the api using curl with paremeters to get the .sql script and check the file
