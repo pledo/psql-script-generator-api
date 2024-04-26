@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  fastapi:
+    build: .
+    ports:
+      - "8000:8000"
+    depends_on:
+      - redis
+    environment:
+      - REDIS_HOST=redis
+      #- REDIS_PASSWORD=password
+
+  redis:
+    image: "redis:latest"
+    ports:
+      - "6379:6379"
+    command: redis-server --loglevel warning
+
+  populate_redis:
+    build: .
+    depends_on:
+      - redis
+    #environment:
+    #  - GITHUB_TOKEN=your-github-token
+    command: python populate_redis.py
