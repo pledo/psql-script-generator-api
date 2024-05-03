@@ -1,0 +1,148 @@
+---
+# Source: psql-script-generator-api/templates/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: psql-script-generator-api
+  namespace: apps
+  labels:
+    helm.sh/chart: psql-script-generator-api-0.1.0
+    app: psql-script-generator-api
+    app.kubernetes.io/name: psql-script-generator-api
+    app.kubernetes.io/instance: psql-generate
+    env: prod
+    app.kubernetes.io/version: "0.1.0"
+    app.kubernetes.io/managed-by: Helm
+    env: prod
+    app: psql-script-generator-api
+automountServiceAccountToken: true
+---
+# Source: psql-script-generator-api/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: psql-script-generator-api
+  namespace: apps
+  labels:
+    helm.sh/chart: psql-script-generator-api-0.1.0
+    app: psql-script-generator-api
+    app.kubernetes.io/name: psql-script-generator-api
+    app.kubernetes.io/instance: psql-generate
+    env: prod
+    app.kubernetes.io/version: "0.1.0"
+    app.kubernetes.io/managed-by: Helm
+    env: prod
+    app: psql-script-generator-api
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: app-port
+      protocol: TCP
+      name: http
+  selector:
+    app: psql-script-generator-api
+    app.kubernetes.io/name: psql-script-generator-api
+    app.kubernetes.io/instance: psql-generate
+    env: prod
+---
+# Source: psql-script-generator-api/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: psql-script-generator-api
+  namespace: apps
+  labels:
+    helm.sh/chart: psql-script-generator-api-0.1.0
+    app: psql-script-generator-api
+    app.kubernetes.io/name: psql-script-generator-api
+    app.kubernetes.io/instance: psql-generate
+    env: prod
+    app.kubernetes.io/version: "0.1.0"
+    app.kubernetes.io/managed-by: Helm
+    env: prod
+    app: psql-script-generator-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: psql-script-generator-api
+      app.kubernetes.io/name: psql-script-generator-api
+      app.kubernetes.io/instance: psql-generate
+      env: prod
+  template:
+    metadata:
+      labels:
+        helm.sh/chart: psql-script-generator-api-0.1.0
+        app: psql-script-generator-api
+        app.kubernetes.io/name: psql-script-generator-api
+        app.kubernetes.io/instance: psql-generate
+        env: prod
+        app.kubernetes.io/version: "0.1.0"
+        app.kubernetes.io/managed-by: Helm
+        env: prod
+        app: psql-script-generator-api
+    spec:
+      serviceAccountName: psql-script-generator-api
+      securityContext:
+        {}
+      containers:
+        - name: psql-script-generator-api
+          securityContext:
+            {}
+          image: "pledo/psql-script-generator-api:v0.1.0"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: app-port
+              containerPort: 8000
+              protocol: TCP
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            limits:
+              cpu: 100m
+              memory: 128Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi
+---
+# Source: psql-script-generator-api/templates/tests/test-connection.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "psql-script-generator-api-test-connection"
+  labels:
+    helm.sh/chart: psql-script-generator-api-0.1.0
+    app: psql-script-generator-api
+    app.kubernetes.io/name: psql-script-generator-api
+    app.kubernetes.io/instance: psql-generate
+    env: prod
+    app.kubernetes.io/version: "0.1.0"
+    app.kubernetes.io/managed-by: Helm
+    env: prod
+    app: psql-script-generator-api
+  annotations:
+    "helm.sh/hook": test
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args: ['psql-script-generator-api:80']
+  restartPolicy: Never

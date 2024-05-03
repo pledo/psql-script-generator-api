@@ -1,0 +1,6 @@
+apiVersion: v2
+name: psql-script-generator-api
+description: An Api that generates a .sql script
+type: application
+version: 0.1.0
+appVersion: "0.1.0"
