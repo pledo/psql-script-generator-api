@@ -1,4 +1,5 @@
-from fastapi import FastAPI, HTTPException, Response
+from fastapi import FastAPI, HTTPException, Response, status
+from pydantic import BaseModel
 from jinja2 import Template
 import os
 import redis
@@ -11,6 +12,22 @@ redis_port = os.getenv('REDIS_PORT', 6379)
 redis_db = os.getenv('REDIS_DB', 0)
 redis_client = redis.StrictRedis(host=redis_host, port=redis_port, db=redis_db, decode_responses=True)
 #redis_client = redis.Redis(host=redis_host, decode_responses=True)
+
+
+class HealthCheck(BaseModel):
+    status: str = "OK"
+
+
+@app.get(
+    "/health",
+    tags=["healthcheck"],
+    summary="Perform a Health Check",
+    response_description="Return HTTP Status Code 200 (OK)",
+    status_code=status.HTTP_200_OK,
+    response_model=HealthCheck)
+def get_health() -> HealthCheck:
+    return HealthCheck(status="OK")
+
 
 @app.get('/redis-ping')
 def redisping():
