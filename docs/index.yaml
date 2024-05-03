@@ -1,0 +1,19 @@
+apiVersion: v1
+entries:
+  psql-script-generator-api:
+  - apiVersion: v2
+    appVersion: 0.2.0
+    created: "2024-05-03T09:41:04.331107377-03:00"
+    description: An Api that generates a .sql script
+    digest: 47bef555e1086f4d43f896bd97022b98b3cd0c7f6616f95d340edd7dd187536b
+    maintainers:
+    - email: paulofledo@gmail.com
+      name: Paulo Ledo
+    name: psql-script-generator-api
+    sources:
+    - https://github.com/pledo/psql-script-generator-api
+    type: application
+    urls:
+    - psql-script-generator-api-0.2.0.tgz
+    version: 0.2.0
+generated: "2024-05-03T09:41:04.330471461-03:00"
