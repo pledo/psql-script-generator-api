@@ -3,7 +3,7 @@ replicaCount: 1
 image:
   repository: pledo/psql-script-generator-api
   pullPolicy: IfNotPresent
-  tag: "v0.2.0"
+  tag: "v0.3.0"
 
 containerPort: 8000
 containerPortName: app-port
