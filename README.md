@@ -9,6 +9,28 @@
  helm repo update
 ```
 
+2- Install helm package
+
+```bash
+helm install test test/psql-script-generator-api
+
+```
+
+3- Testing
+```bash
+
+# run the port-forward
+  export POD_NAME=$(kubectl get pods --namespace test-apps -l "app.kubernetes.io/name=psql-script-generator-api,app.kubernetes.io/instance=test" -o jsonpath="{.items[0].metadata.name}")
+  export CONTAINER_PORT=$(kubectl get pod --namespace test-apps $POD_NAME -o jsonpath="{.spec.containers[0].ports[0].containerPort}")
+  echo "Visit http://127.0.0.1:8080 to use your application"
+  kubectl --namespace test-apps port-forward $POD_NAME 8080:$CONTAINER_PORT
+
+
+# health get
+curl -XGET localhost:8080/health
+
+```
+
 #### Local Usage
 
 0- Make sure you have the postgres-client installed
