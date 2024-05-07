@@ -3,7 +3,7 @@ replicaCount: 1
 image:
   repository: pledo/psql-script-generator-api
   pullPolicy: IfNotPresent
-  tag: "v0.1.0"
+  tag: "v0.2.0"
 
 containerPort: 8000
 containerPortName: app-port
@@ -19,7 +19,7 @@ schedulerName: default-scheduler
 terminationGracePeriodSeconds: "30"
 
 serviceAccount:
-  create: false
+  create: true
   automount: true
   annotations: {}
   name: ""
@@ -27,8 +27,8 @@ serviceAccount:
 podAnnotations: {}
 podLabels: {}
 
-env: default
-namespace: default
+env: test
+namespace: test-apps
 podSecurityContext: {}
 
 securityContext: {}
@@ -38,13 +38,13 @@ service:
   port: 80
 
 ingress:
-  enabled: true
+  enabled: false
   className: ""
   annotations: {}
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
   hosts:
-    - host: ENV-chart-example.local
+    - host: psql-script-generate-api.pledo.com.br
       paths:
         - path: /
           pathType: ImplementationSpecific
@@ -64,23 +64,23 @@ resources:
 
 livenessProbe:
   failureThreshold: 3
-  initialDelaySeconds: 15
+  initialDelaySeconds: 40
   periodSeconds: 10
   successThreshold: 1
   timeoutSeconds: 1
   httpGet:
-    path: /
-    port: http
+    path: /health
+    port: app-port
 
 readinessProbe:
   failureThreshold: 3
-  initialDelaySeconds: 15
+  initialDelaySeconds: 40
   periodSeconds: 10
   successThreshold: 1
   timeoutSeconds: 1
   httpGet:
-    path: /
-    port: http
+    path: /health
+    port: app-port
 
 autoscaling:
   enabled: false
