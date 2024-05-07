@@ -1,7 +1,20 @@
 # psql-script-generator-api
 
-### Usage
 
+#### Install Install the API inside your Kubernetes cluster
+
+1- Add the helm repo
+```bash
+ helm repo add test https://pledo.github.io/psql-script-generator-api
+ helm repo update
+```
+
+#### Local Usage
+
+0- Make sure you have the postgres-client installed
+```bash
+sudo apt install postgresql-client
+```
 1- Clone repo and enter inside It
 
 ```bash

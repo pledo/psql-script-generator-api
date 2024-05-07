@@ -3,6 +3,7 @@ from pydantic import BaseModel
 from jinja2 import Template
 import os
 import redis
+import requests
 
 app = FastAPI()
 
@@ -13,9 +14,41 @@ redis_db = os.getenv('REDIS_DB', 0)
 redis_client = redis.StrictRedis(host=redis_host, port=redis_port, db=redis_db, decode_responses=True)
 #redis_client = redis.Redis(host=redis_host, decode_responses=True)
 
+# Github repository
+github_repo_owner = os.getenv('GITHUB_REPO_OWNER', 'pledo')
+github_repo_name = os.getenv('GITHUB_REPO_NAME', 'psql-script-generator')
+branch_name = os.getenv('GITHUB_REPO_BRANCH', 'main')
+folder_path = os.getenv('GITHUB_REPO_FOLDER_PATH', 'src/cli/templates')
 
 class HealthCheck(BaseModel):
     status: str = "OK"
+
+
+@app.get('/redis-refresh')
+def redisrefresh():
+    # GitHub API URL to get the contents of a directory
+    github_api_url = f'https://api.github.com/repos/{github_repo_owner}/{github_repo_name}/contents/{folder_path}?ref={branch_name}'
+    response = requests.get(github_api_url)
+    print(response)
+    if response.status_code == 200:
+        # Iterate over the files in the templates directory
+        for file_info in response.json():
+            file_name = file_info['name']
+            file_download_url = file_info['download_url']
+    
+            # Download the file content
+            file_content_response = requests.get(file_download_url)
+            if file_content_response.status_code == 200:
+                file_content = file_content_response.content.decode('utf-8')
+    
+                # Store the file content in Redis
+                redis_client.set(file_name, file_content)
+                print(f"Template '{file_name}' loaded into Redis.")
+            else:
+                print(f"Failed to download template '{file_name}' from GitHub.")
+    else:
+        print("Failed to fetch templates from GitHub.")
+    print(f"Files loaded:{redis_client.keys()}")
 
 
 @app.get(
@@ -76,5 +109,5 @@ async def generate_sql_script(data: dict):
     response.headers['Content-Type'] = 'application/octet-stream'
     return response
 
-if __name__ == '__main__':
-    app.run(debug=True)
+#if __name__ == '__main__':
+#    app.run()

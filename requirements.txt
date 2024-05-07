@@ -4,3 +4,4 @@ redis==5.0.4
 requests==2.26.0
 uvicorn==0.15.0
 pydantic
+requests==2.26.0
