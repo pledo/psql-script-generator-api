@@ -1,7 +1,41 @@
 # psql-script-generator-api
 It generates a SQL script based on a Jinja2 template, allowing you to automate the creation of a database, roles, and permissions. It is particularly useful for setting up a PostgreSQL database with predefined roles and permissions.
 
-#### Install the API inside your Kubernetes cluster
+
+#### Install the API inside your Kubernetes cluster with k8 manifests
+
+1- Create the namespace
+```bash
+kubectl create ns test-apps
+```
+
+2- Create the k8 objects
+```bash
+kubectl create -f https://raw.githubusercontent.com/pledo/psql-script-generator-api/main/docs/k8-manifests/psql-script-generator-k8.yaml
+
+
+# Testing, running port-forward
+
+  export POD_NAME=$(kubectl get pods --namespace test-apps -l "app.kubernetes.io/name=psql-script-generator-api,app.kubernetes.io/instance=test" -o jsonpath="{.items[0].metadata.name}")
+  export CONTAINER_PORT=$(kubectl get pod --namespace test-apps $POD_NAME -o jsonpath="{.spec.containers[0].ports[0].containerPort}")
+  echo "Visit http://127.0.0.1:8080 to use your application"
+  kubectl --namespace test-apps port-forward $POD_NAME 8080:$CONTAINER_PORT
+
+# health get
+curl -XGET localhost:8080/health
+````
+
+2- Cleaning the environment
+```bash
+kubectl delete -f https://raw.githubusercontent.com/pledo/psql-script-generator-api/main/docs/k8-manifests/psql-script-generator-k8.yaml
+
+# Deleting the namespace
+
+kubectl delete -f https://raw.githubusercontent.com/pledo/psql-script-generator-api/main/docs/k8-manifests/psql-script-generator-k8.yaml
+
+```
+
+#### Install the API inside your Kubernetes cluster with Helm
 
 1- Add the helm repo
 ```bash
