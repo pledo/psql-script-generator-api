@@ -1,7 +1,7 @@
 # psql-script-generator-api
+It generates a SQL script based on a Jinja2 template, allowing you to automate the creation of a database, roles, and permissions. It is particularly useful for setting up a PostgreSQL database with predefined roles and permissions.
 
-
-#### Install Install the API inside your Kubernetes cluster
+#### Install the API inside your Kubernetes cluster
 
 1- Add the helm repo
 ```bash
@@ -13,6 +13,21 @@
 
 ```bash
 helm install test test/psql-script-generator-api
+
+
+#Custom values, you can find 3 values.yaml files that you can use, modify or 
+#create new ones, and execute them, after cloning the repo, enter inside the root folder:
+
+# Listing value files
+ls -1 charts/psql-script-generator-api/|egrep -i Values
+prodValues.yaml
+testValues.yaml
+values.yaml
+
+# Install the chart using one of them, for example.
+helm install -f charts/psql-script-generator-api/values.yaml test test/psql-script-generator-api
+
+```
 
 ```
 
@@ -29,6 +44,14 @@ helm install test test/psql-script-generator-api
 # health get
 curl -XGET localhost:8080/health
 
+```
+4- Clean up the environment
+```bash
+# Uninstall the test relase
+helm uninstall test
+
+# Remove the repo
+helm repo remove test
 ```
 
 #### Local Usage
