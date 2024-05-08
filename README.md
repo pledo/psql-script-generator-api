@@ -23,6 +23,15 @@ kubectl create -f https://raw.githubusercontent.com/pledo/psql-script-generator-
 
 # health get
 curl -XGET localhost:8080/health
+
+# Generating the .sql script
+curl -o test_sql_script.sql -XPOST 'localhost:8000/generate-sql-script' \
+-H 'Content-Type: application/json' \
+-d '{"database":"test","role":"test_readwrite","user":"test_user","user_pass":"qweasdzxc","template":"readwrite-user-template.sql.j2"}'
+
+# Checking the .sql script
+cat test_sql_script.sql
+
 ````
 
 2- Cleaning the environment
@@ -77,6 +86,14 @@ helm install -f charts/psql-script-generator-api/values.yaml test test/psql-scri
 
 # health get
 curl -XGET localhost:8080/health
+
+# Generating the .sql script
+curl -o test_sql_script.sql -XPOST 'localhost:8000/generate-sql-script' \
+-H 'Content-Type: application/json' \
+-d '{"database":"test","role":"test_readwrite","user":"test_user","user_pass":"qweasdzxc","template":"readwrite-user-template.sql.j2"}'
+
+# Checking the .sql script
+cat test_sql_script.sql
 
 ```
 4- Clean up the environment
