@@ -50,6 +50,13 @@ def redisrefresh():
         print("Failed to fetch templates from GitHub.")
     print(f"Files loaded:{redis_client.keys()}")
 
+@app.get('/list-templates')
+def list_templates():
+    templates = redis_client.keys()
+    print(f"Current templates:{templates}")
+    return templates
+
+
 
 @app.get(
     "/health",
