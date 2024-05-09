@@ -1,0 +1,121 @@
+---
+# Source: redis/templates/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: redis
+  namespace: test-apps
+  labels:
+    helm.sh/chart: redis-0.1.0
+    app.kubernetes.io/name: redis
+    app.kubernetes.io/instance: redis
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+automountServiceAccountToken: true
+---
+# Source: redis/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis
+  namespace: test-apps
+  labels:
+    helm.sh/chart: redis-0.1.0
+    app.kubernetes.io/name: redis
+    app.kubernetes.io/instance: redis
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: ClusterIP
+  ports:
+    - port: 6379
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: redis
+    app.kubernetes.io/instance: redis
+---
+# Source: redis/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis
+  namespace: test-apps
+  labels:
+    helm.sh/chart: redis-0.1.0
+    app.kubernetes.io/name: redis
+    app.kubernetes.io/instance: redis
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: redis
+      app.kubernetes.io/instance: redis
+  template:
+    metadata:
+      labels:
+        helm.sh/chart: redis-0.1.0
+        app.kubernetes.io/name: redis
+        app.kubernetes.io/instance: redis
+        app.kubernetes.io/version: "1.16.0"
+        app.kubernetes.io/managed-by: Helm
+    spec:
+      serviceAccountName: redis
+      securityContext:
+        {}
+      containers:
+        - name: redis
+          securityContext:
+            {}
+          image: "redis:7.2.4"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 6379
+              protocol: TCP
+          livenessProbe:
+            exec:
+              command:
+              - redis-cli
+              - ping
+            failureThreshold: 3
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          readinessProbe:
+            exec:
+              command:
+              - redis-cli
+              - ping
+            failureThreshold: 3
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            {}
+---
+# Source: redis/templates/tests/test-connection.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "redis-test-connection"
+  labels:
+    helm.sh/chart: redis-0.1.0
+    app.kubernetes.io/name: redis
+    app.kubernetes.io/instance: redis
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    "helm.sh/hook": test
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['echo PING']
+      args: ['redis:6379']
+  restartPolicy: Never
