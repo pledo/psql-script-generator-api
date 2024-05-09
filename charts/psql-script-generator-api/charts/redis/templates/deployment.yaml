@@ -1,17 +1,17 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "psql-script-generator-api.name" . }}
+  name: {{ include "redis.fullname" . }}
   namespace: {{ .Values.namespace }}
   labels:
-    {{- include "psql-script-generator-api.labels" . | nindent 4 }}
+    {{- include "redis.labels" . | nindent 4 }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
-      {{- include "psql-script-generator-api.selectorLabels" . | nindent 6 }}
+      {{- include "redis.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -19,7 +19,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "psql-script-generator-api.labels" . | nindent 8 }}
+        {{- include "redis.labels" . | nindent 8 }}
         {{- with .Values.podLabels }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
@@ -28,7 +28,7 @@ spec:
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "psql-script-generator-api.serviceAccountName" . }}
+      serviceAccountName: {{ include "redis.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
@@ -36,17 +36,10 @@ spec:
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
-          env:
-          - name: REDIS_PORT
-            value: "6379"
-          - name: REDIS_HOST
-            value: redis
-          - name: REDIS_DB
-            value: "0"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
-            - name: {{ .Values.containerPortName }}
-              containerPort: {{ .Values.containerPort }}
+            - name: http
+              containerPort: {{ .Values.service.port }}
               protocol: TCP
           livenessProbe:
             {{- toYaml .Values.livenessProbe | nindent 12 }}
