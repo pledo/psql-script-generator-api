@@ -1,0 +1,8 @@
+When Redis get updates 
+ helm dependency build .
+
+When the helm chart get updates: 
+ helm package ../charts/psql-script-generator-api
+
+After helm chart update, you have to update the repo index
+ cd docs && helm repo index .
