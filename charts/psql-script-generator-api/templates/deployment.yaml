@@ -35,7 +35,7 @@ spec:
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          image: "{{ .Values.global.image.repository }}:{{ .Values.global.image.tag | default .Chart.AppVersion }}"
           env:
           - name: REDIS_PORT
             value: "6379"
@@ -43,7 +43,7 @@ spec:
             value: redis
           - name: REDIS_DB
             value: "0"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          imagePullPolicy: {{ .Values.global.image.pullPolicy }}
           ports:
             - name: {{ .Values.containerPortName }}
               containerPort: {{ .Values.containerPort }}

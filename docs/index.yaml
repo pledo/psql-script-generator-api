@@ -2,14 +2,33 @@ apiVersion: v1
 entries:
   psql-script-generator-api:
   - apiVersion: v2
-    appVersion: 0.5.0
-    created: "2024-05-09T21:42:22.648149972-03:00"
+    appVersion: 0.6.0
+    created: "2024-05-09T23:36:37.548434111-03:00"
     dependencies:
     - name: redis
       repository: file://charts/redis
       version: 7.2.4
     description: An Api that generates a .sql script
-    digest: e9932d54949aa9d12d24a47cd758abab2330e107fd8e994c82798421238d7eef
+    digest: defc9d66da102f961f03a89e2ac7bd42dfc9486b5fabc8a43d5cc25e8991a6f4
+    maintainers:
+    - email: paulofledo@gmail.com
+      name: Paulo Ledo
+    name: psql-script-generator-api
+    sources:
+    - https://github.com/pledo/psql-script-generator-api
+    type: application
+    urls:
+    - psql-script-generator-api-0.6.0.tgz
+    version: 0.6.0
+  - apiVersion: v2
+    appVersion: 0.5.0
+    created: "2024-05-09T23:36:37.536690863-03:00"
+    dependencies:
+    - name: redis
+      repository: file://charts/redis
+      version: 7.2.4
+    description: An Api that generates a .sql script
+    digest: 6e54092427ea52a7f1f63f270f964e6b8e136cbb801a2a49261824f6562ef45b
     maintainers:
     - email: paulofledo@gmail.com
       name: Paulo Ledo
@@ -22,7 +41,7 @@ entries:
     version: 0.5.0
   - apiVersion: v2
     appVersion: 0.4.0
-    created: "2024-05-09T21:42:22.646567519-03:00"
+    created: "2024-05-09T23:36:37.53535469-03:00"
     description: An Api that generates a .sql script
     digest: e0b11be9dc93d544fbd2b5999b7e528d2f9653b5160eb9611381166eecc26ac2
     maintainers:
@@ -37,7 +56,7 @@ entries:
     version: 0.4.0
   - apiVersion: v2
     appVersion: 0.3.0
-    created: "2024-05-09T21:42:22.6460409-03:00"
+    created: "2024-05-09T23:36:37.534842146-03:00"
     description: An Api that generates a .sql script
     digest: af8e96d33e23ccf1a3c98ed4667c139e213be21460cef68c19b0f721717cad23
     maintainers:
@@ -50,4 +69,4 @@ entries:
     urls:
     - psql-script-generator-api-0.3.0.tgz
     version: 0.3.0
-generated: "2024-05-09T21:42:22.64540378-03:00"
+generated: "2024-05-09T23:36:37.53421929-03:00"

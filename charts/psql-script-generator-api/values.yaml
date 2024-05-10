@@ -1,9 +1,17 @@
 replicaCount: 1
 
-image:
-  repository: pledo/psql-script-generator-api
-  pullPolicy: IfNotPresent
-  tag: "v0.4.0"
+#image:
+#  repository: pledo/psql-script-generator-api
+#  pullPolicy: IfNotPresent
+#  tag: "v0.4.0"
+
+global:
+  image:
+    repository: pledo/psql-script-generator-api
+    tag: "v0.4.0"
+    pullPolicy: IfNotPresent
+  #imageTag: "v0.4.0"
+  #imageRepository: pledo/psql-script-generator-api
 
 containerPort: 8000
 containerPortName: app-port
@@ -64,7 +72,7 @@ resources:
 
 livenessProbe:
   failureThreshold: 3
-  initialDelaySeconds: 40
+  initialDelaySeconds: 10
   periodSeconds: 10
   successThreshold: 1
   timeoutSeconds: 1
@@ -74,7 +82,7 @@ livenessProbe:
 
 readinessProbe:
   failureThreshold: 3
-  initialDelaySeconds: 40
+  initialDelaySeconds: 10
   periodSeconds: 10
   successThreshold: 1
   timeoutSeconds: 1

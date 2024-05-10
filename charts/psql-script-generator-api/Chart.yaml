@@ -2,8 +2,8 @@ apiVersion: v2
 name: psql-script-generator-api
 description: An Api that generates a .sql script
 type: application
-version: 0.5.0
-appVersion: "0.5.0"
+version: 0.6.0
+appVersion: "0.6.0"
 maintainers:
   - name: Paulo Ledo
     email: paulofledo@gmail.com
